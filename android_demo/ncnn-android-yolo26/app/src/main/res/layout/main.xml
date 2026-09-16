@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/black">
+
+    <SurfaceView
+        android:id="@+id/cameraview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 检测结果绘制层：中文标签 + 检测框，与 SurfaceView 等边界，坐标归一化对齐 -->
+    <ncnn.v5lite.demo.OverlayView
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 顶部状态栏：检测到几个物体，分别是什么 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_panel"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOLOv5-Lite 实时检测"
+                android:textColor="#99FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="正在启动…"
+                android:textColor="#FFFFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- 菜单：记录历史 / 帮助 / 关于 -->
+        <ImageButton
+            android:id="@+id/buttonMenu"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_button_gray"
+            android:contentDescription="菜单"
+            android:src="@android:drawable/ic_menu_more"
+            android:tint="#FFFFFFFF" />
+
+    </LinearLayout>
+
+    <!-- 底部控制面板 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_panel"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="模型"
+                android:textColor="#CCFFFFFF"
+                android:textSize="13sp" />
+
+            <Spinner
+                android:id="@+id/spinnerModel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_spinner"
+                android:drawSelectorOnTop="true"
+                android:entries="@array/model_array"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:popupBackground="@drawable/bg_panel"
+                android:spinnerMode="dropdown" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="算力"
+                android:textColor="#CCFFFFFF"
+                android:textSize="13sp" />
+
+            <Spinner
+                android:id="@+id/spinnerCPUGPU"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_spinner"
+                android:drawSelectorOnTop="true"
+                android:entries="@array/cpugpu_array"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:popupBackground="@drawable/bg_panel"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonSwitchCamera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button"
+                android:minHeight="42dp"
+                android:text="切换摄像头"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/buttonToggleLog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button"
+                android:minHeight="42dp"
+                android:text="记录：开"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/buttonClearLog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_button_gray"
+                android:minHeight="42dp"
+                android:text="清空记录"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/logInfoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="记录：0 条"
+            android:textColor="#99FFFFFF"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,9 @@
+# 本地签名密钥与凭据（绝不入库）
+release-key.jks
+keystore.properties
+
+# 构建产物
+app/build/
+.cxx/
+.gradle/
+*.iml

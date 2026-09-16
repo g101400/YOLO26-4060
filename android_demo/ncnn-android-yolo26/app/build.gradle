@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+
+android {
+    // 2026-09-16：compileSdk/targetSdk 由 24 提到 29 —— 原 APK 未声明 targetSdk（默认取 minSdk=24），
+    // 在新版 Android 上首次启动会被系统提示「此应用专为旧版 Android 系统打造」。
+    // 29 是 AGP 3.5.4 能稳定支持的最高等级（platforms;android-29 已装），再高需升级 AGP/Gradle。
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    defaultConfig {
+        applicationId "com.ncnn.v26lite.demo"
+        archivesBaseName = "$applicationId"
+
+        minSdkVersion 24
+        targetSdkVersion 29
+
+        // 仅编 arm 双架构（手机够用；x86/x86_64 仅模拟器需要，省编译时间与 APK 体积）
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            version "3.10.2"
+            path file('src/main/jni/CMakeLists.txt')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dependencies {
+        implementation 'com.android.support:support-v4:24.2.1'
+    }
+
+    // 源码含大量中文字符串字面量（COCO 中文类名 / 状态栏文案）。
+    // Windows 平台 javac 默认按 GBK 读源文件会导致中文变乱码，这里显式钉死 UTF-8。
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    // 签名（release）：密钥与口令从工程根目录 keystore.properties 读取（该文件已 gitignore，绝不入库）。
+    // 缺该文件时跳过签名，仅影响 assembleRelease（debug 不受影响）。
+    def keystoreProps = new Properties()
+    def keystorePropsFile = rootProject.file('keystore.properties')
+    if (keystorePropsFile.exists()) {
+        keystoreProps.load(new FileInputStream(keystorePropsFile))
+        signingConfigs {
+            release {
+                storeFile file('../release-key.jks')
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (keystorePropsFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}

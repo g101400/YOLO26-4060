@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">YOLOv26-Lite 检测</string>
+<string-array name="model_array">
+    <item>YOLOv26n 320（最快）</item>
+    <item>YOLOv26n 416（推荐）</item>
+    <item>YOLOv26n 640（最准）</item>
+</string-array>
+<string-array name="cpugpu_array">
+    <item>CPU</item>
+    <item>GPU</item>
+</string-array>
+
+<string name="help_text">用法说明：
+
+1. 顶部状态栏实时显示当前检测到几个物体、分别是什么，以及帧率。
+
+2. 底部可切换模型（320 最快 / 416 推荐 / 640 最准）与算力（CPU / GPU）。切换后自动重新加载。
+
+3. 检测结果自动存盘：公共「下载」目录下的 YOLOv26-Lite检测记录 文件夹，每天一个 CSV 文件（detect_日期.csv），字段为 时间、物体、置信度。历史按天保留，不自动清理。
+
+4. 「记录：开 / 关」控制是否落盘；「清空记录」只清空当天，历史文件不受影响。
+
+5. 右上角菜单可查看「记录历史」（按天列出条数，可删除全部）、「帮助」与「关于」。
+
+提示：目标较小时可换更准的 640 模型；光线不足时检测置信度会下降。</string>
+
+<string name="about_text">YOLOv26-Lite 实时检测
+
+版本：%1$s
+系列：%2$s
+引擎：ncnn（CPU / GPU Vulkan）
+模型：YOLOv26n（320 / 416 / 640，COCO 80 类）
+
+检测记录：公共「下载」目录 / YOLOv26-Lite检测记录 / detect_日期.csv
+（每天一个文件，按天保留历史）
+
+版本规划：1.x = YOLOv5-Lite 系列；2.x = YOLOv8 系列；3.x = YOLO11 系列；6.x = YOLO26 系列。
+
+发布平台：Android（本包）、Windows。</string>
+</resources>

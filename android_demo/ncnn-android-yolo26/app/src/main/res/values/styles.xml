@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色沉浸式主题（框架 Material，不需要 AppCompat / AndroidX） -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">#FF111827</item>
+        <item name="android:colorPrimaryDark">#FF0B1220</item>
+        <item name="android:colorAccent">#FF38BDF8</item>
+        <item name="android:statusBarColor">#FF0B1220</item>
+        <item name="android:navigationBarColor">#FF0B1220</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorControlNormal">#FF9CA3AF</item>
+    </style>
+</resources>
