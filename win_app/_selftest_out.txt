@@ -1,0 +1,13 @@
+[selftest] 版本 1.2.1 (YOLOv5-Lite 系列 / Windows)
+[selftest] 模型：416-lite-s（推荐）  输入：416  目录：C:\Users\admin\AppData\Local\Temp\_MEI000080602\models
+[selftest] 推理 29.5 ms，检出 7 个目标（阈值 0.35）
+   人      0.88  [362,87,601,715]
+   人      0.86  [984,209,1079,568]
+   人      0.86  [580,102,882,794]
+   人      0.78  [6,133,234,786]
+   自行车    0.76  [407,432,565,861]
+   自行车    0.75  [42,401,216,852]
+   自行车    0.71  [639,433,848,936]
+[selftest] 记录文件：D:\BaiduNetdiskDownload\YOLOv5-Lite检测记录\detect_20260916.csv（28 条）
+[selftest] 历史：[('2026-09-16', 28)]
+[selftest] OK

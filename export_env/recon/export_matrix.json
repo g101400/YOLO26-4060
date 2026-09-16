@@ -1,0 +1,44 @@
+[
+  {
+    "series": "v11",
+    "imgsz": 320,
+    "bin_MB": 10.0,
+    "anchors": 2100,
+    "dir": "v11_320_ncnn"
+  },
+  {
+    "series": "v11",
+    "imgsz": 320,
+    "bin_MB": 10.0,
+    "anchors": 2100,
+    "dir": "v11_320_ncnn"
+  },
+  {
+    "series": "v26",
+    "imgsz": 320,
+    "bin_MB": 9.21,
+    "anchors": 2100,
+    "dir": "(未落盘,实测值)"
+  },
+  {
+    "series": "v8",
+    "imgsz": 320,
+    "bin_MB": 12.05,
+    "anchors": 2100,
+    "dir": "v8_320_ncnn"
+  },
+  {
+    "series": "v8",
+    "imgsz": 416,
+    "bin_MB": 12.06,
+    "anchors": 3549,
+    "dir": "v8_416_ncnn"
+  },
+  {
+    "series": "v8",
+    "imgsz": 640,
+    "bin_MB": 12.12,
+    "anchors": 8400,
+    "dir": "v8_640_ncnn"
+  }
+]

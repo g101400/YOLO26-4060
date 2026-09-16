@@ -1,0 +1,41 @@
+{
+  "imgsz": 320,
+  "models": {
+    "v8": {
+      "tag": "v8",
+      "weight": "yolov8n.pt",
+      "export_dir": "D:\\Users\\WorkBuddy\\ai-vision\\export_env\\yolov8n_ncnn_model",
+      "files": [
+        "metadata.yaml",
+        "model.ncnn.bin",
+        "model.ncnn.param",
+        "model_ncnn.py"
+      ],
+      "error": "IndexError: list index out of range"
+    },
+    "v11": {
+      "tag": "v11",
+      "weight": "yolo11n.pt",
+      "export_dir": "D:\\Users\\WorkBuddy\\ai-vision\\export_env\\yolo11n_ncnn_model",
+      "files": [
+        "metadata.yaml",
+        "model.ncnn.bin",
+        "model.ncnn.param",
+        "model_ncnn.py"
+      ],
+      "error": "IndexError: list index out of range"
+    },
+    "v26": {
+      "tag": "v26",
+      "weight": "yolo26n.pt",
+      "export_dir": "D:\\Users\\WorkBuddy\\ai-vision\\export_env\\yolo26n_ncnn_model",
+      "files": [
+        "metadata.yaml",
+        "model.ncnn.bin",
+        "model.ncnn.param",
+        "model_ncnn.py"
+      ],
+      "error": "IndexError: list index out of range"
+    }
+  }
+}

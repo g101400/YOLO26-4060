@@ -1,0 +1,14 @@
+*.log
+__pycache__/
+.venv/
+.venv312/
+*.pt
+*.onnx
+*.pnnx.bin
+*.pnnx.param
+build/
+dist/
+.cxx/
+.gradle/
+*.apk
+local.properties
