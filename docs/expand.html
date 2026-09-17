@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>扩展更多类别与分割 · YOLO-Lite</title>
+<style>
+  body{background:#0e0e12;color:#e6e6ea;font-family:-apple-system,"Noto Sans CJK SC",sans-serif;line-height:1.7;padding:16px;margin:0}
+  h1{font-size:21px;color:#7fd1ff;margin:0 0 4px}
+  h2{font-size:16px;color:#ffd166;margin:20px 0 6px;border-left:4px solid #ffd166;padding-left:8px}
+  .sub{color:#9aa;font-size:12px;margin-bottom:12px}
+  .card{background:#16161c;border:1px solid #2a2a33;border-radius:10px;padding:12px 14px;margin:10px 0}
+  .card h3{margin:0 0 6px;color:#9fe;font-size:15px}
+  .kv{font-size:12.5px;color:#cdd}
+  .tag{display:inline-block;background:#1d2330;color:#9fe;font-size:11px;padding:1px 7px;border-radius:6px;margin:2px 3px 0 0}
+  code{background:#222;padding:1px 5px;border-radius:4px;color:#9fe}
+  b{color:#fff}
+  .note{background:#16161c;border:1px solid #2a2a33;border-radius:8px;padding:10px 12px;font-size:12.5px;color:#bcd;margin:10px 0}
+</style>
+</head>
+<body>
+<h1>扩展更多类别与分割</h1>
+<div class="sub">把 COCO 80 类基线，扩展到「更多目标的识别 + 实例分割」。三种路线，按成本与诉求选择</div>
+
+<h2>路线 A：开放词汇检测（不训练，直接扩类别）</h2>
+<div class="card">
+<h3>YOLO-World / Grounding DINO / OWL-ViT</h3>
+<div class="kv">用<b>文本提示</b>检测任意类别，无需重新训练。适合 80 类覆盖不到的长尾与临时需求。<br>
+<span class="tag">零样本</span><span class="tag">即开即用</span><br>
+• YOLO-World：与 YOLO 同族，社区已有 ncnn/ONNX 导出，端侧可行性最高。<br>
+• Grounding DINO / OWL-ViT：Transformer，精度高但更重，宜放云端做「检测→VLM」前置。<br>
+<b>落地</b>：把 YOLO-World 导出的 ncnn 模型放入 <code>assets/</code>，复用现有 anchor-free 解码器（v8/v11/v26 同构）即可在 app 内加载。</div>
+</div>
+
+<h2>路线 B：微调自有数据（最稳，扩你关心的类）</h2>
+<div class="card">
+<h3>在 YOLOv8/v11/v26 上微调</h3>
+<div class="kv">收集你的目标数据（标注）→ <code>ultralytics</code> 微调 → 导出 ncnn → 丢进 app。<br>
+<span class="tag">高精度</span><span class="tag">领域适配</span><span class="tag">复用解码器</span><br>
+<b>关键</b>：v8/v11/v26 输出布局一致，C++ 解码器零改动，只换模型文件。<b>v5 因锚框范式需单独分支</b>。<br>
+<b>自动标注降本</b>：见「结合大模型改进」→ 用 VLM 预标 + 纠错，回流再训练。</div>
+</div>
+
+<h2>路线 C：实例分割（识别 + 像素级轮廓）</h2>
+<div class="card">
+<h3>YOLOv8-seg / YOLO11-seg</h3>
+<div class="kv">在检测框之外输出掩码（mask），可做面积统计、缺陷区域、抠图。<br>
+<span class="tag">像素级</span><span class="tag">需改解码器</span><br>
+<b>改动点</b>：① 导出 seg 模型（proto + 框）；② C++ 解码器增加 mask 分支（反卷积 proto → 上采样 → 按框裁切）；③ <code>OverlayView</code> 增加掩码绘制；④ 类别数随训练数据变化。<br>
+<b>现状</b>：当前安卓端为纯检测（box）。分割为下一步工程，需一次 native 重构 + 重编，但架构已预留（同一套加载/回调框架）。</div>
+</div>
+
+<h2>安卓端集成脚手架（通用）</h2>
+<div class="note">
+1. 模型文件放 <code>app/src/main/assets/</code>（如 <code>yoloworld_ncnn_model/</code>）。<br>
+2. <code>Ncnnv5lite.loadModel</code> 已支持按 id 加载，新增一类模型只需在 <code>modeltypes[]</code> 与 <code>model_array</code> 加一项。<br>
+3. anchor-free 系列（v8/v11/v26）解码器可复用；seg 需扩展 <code>yolov8.cpp</code> 的 <code>decode_anchorfree</code>。<br>
+4. 类别名表在 <code>CocoLabels.java</code>，扩类时同步扩展即可（或在 assets 放 <code>labels.txt</code> 动态读取）。
+</div>
+
+<h2>建议的推进顺序</h2>
+<div class="kv">
+① 先用 <b>YOLO-World（路线 A）</b> 验证「更多类别」需求，零成本；<br>
+② 沉淀自有数据，走 <b>微调（路线 B）</b> 提升领域精度；<br>
+③ 需要轮廓/面积时，上 <b>seg（路线 C）</b>，重构一次解码与绘制。
+</div>
+</body>
+</html>
