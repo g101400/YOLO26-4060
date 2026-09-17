@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四系列对比 · YOLO-Lite</title>
+<style>
+  body{background:#0e0e12;color:#e6e6ea;font-family:-apple-system,"Noto Sans CJK SC",sans-serif;line-height:1.7;padding:16px;margin:0}
+  h1{font-size:21px;color:#7fd1ff;margin:0 0 4px}
+  h2{font-size:16px;color:#ffd166;margin:22px 0 8px;border-left:4px solid #ffd166;padding-left:8px}
+  .sub{color:#9aa;font-size:12px;margin-bottom:12px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+  th,td{border:1px solid #333;padding:7px 6px;vertical-align:top}
+  th{background:#1b1b22;color:#7fd1ff}
+  tr:nth-child(even) td{background:#16161c}
+  .note{background:#16161c;border:1px solid #2a2a33;border-radius:8px;padding:10px 12px;font-size:12.5px;color:#bcd;margin:8px 0}
+  b{color:#fff}
+  .tag{color:#9fe}
+</style>
+</head>
+<body>
+<h1>YOLO-Lite 四系列对比</h1>
+<div class="sub">YOLOv5 / v8 / v11 / v26 · 安卓 ncnn 端侧 · 数字为 COCO 量级参考，实机速度取决于机型与 320/416/640 输入档</div>
+
+<h2>一、速览表</h2>
+<table>
+<tr><th>系列</th><th>检测范式</th><th>CPU 速度<br>(nano)</th><th>精度<br>(mAP@50-95)</th><th>原理创新点</th><th>典型工程场景</th></tr>
+<tr><td><b>v5</b></td><td>锚框<br>anchor-based</td><td>基准</td><td>≈34.3%</td><td>C3 + PANet + SiLU，工程最成熟</td><td>老项目兼容、存量系统、求稳</td></tr>
+<tr><td><b>v8</b></td><td>anchor-free<br>解耦头</td><td>≈80ms</td><td>≈37.3%</td><td>全 anchor-free + 解耦头，现代 YOLO 起点</td><td>生态最全、多任务、团队上手快</td></tr>
+<tr><td><b>v11</b></td><td>anchor-free</td><td>≈56ms</td><td>≈39.5%</td><td>C3k2 多尺度卷积核 + C2PSA 空间注意力</td><td>小目标 / 遮挡 / 复杂背景</td></tr>
+<tr><td><b>v26</b></td><td>anchor-free<br>端到端</td><td>≈39ms</td><td>≈40.3%</td><td>去 DFL、原生无 NMS + ProgLoss/STAL/MuSGD</td><td>边缘 CPU 极致速度、小目标密集、易部署</td></tr>
+</table>
+
+<h2>二、五个维度拆解</h2>
+<p><b>① 检测速度</b>：v5 唯一基于锚框，需预设锚框聚类；v8 起三代为 anchor-free。同精度下 v11 比 v8 快一截（FLOPs 更低），v26 再快约 43%（官方，去 NMS + 结构精简）。选 320 档最快、640 档最准。</p>
+<p><b>② 精度</b>：nano 档随代际递增（34→37→39.5→40.3）。趋势是「同尺寸精度↑、算力↓」。v11 靠注意力换小目标/遮挡鲁棒性；v26 主要靠小目标（STAL）与端到端简化拉开差距。</p>
+<p><b>③ 原理创新性</b>：v5=C3+PANet（范式偏老）；v8=解耦头+全 anchor-free（现代化起点）；v11=C3k2+C2PSA 注意力；v26=回归链路做减法（去 DFL、去 NMS）+ 训练侧创新（ProgLoss/STAL/MuSGD），方向从「堆结构」转向「为边缘部署做减法」。</p>
+<p><b>④ 工程应用场景</b>：v5 适合接手存量/不追新；v8 生态最繁荣（检测/分割/姿态/OBB 全任务）；v11 适合小目标、遮挡、复杂背景且要省算力；v26 适合纯边缘、低功耗、小目标密集、要求低延迟易部署。</p>
+<p><b>⑤ 源代码（本仓库实情）</b>：v5 安卓用老一套 <span class="tag">锚框解码器</span>（native lib 名 <code>libncnnv5lite</code>，类 <code>Yolov5</code>）。<b>v8/v11/v26 三者 ncnn 输出布局完全一致</b>（in0→out0，(84,N)，前 4 通道为 cx/cy/w/h 绝对像素、后 80 通道已是 sigmoid 后类别概率），故 C++ 解码器是<b>同一份代码复用</b>，仅 JNI 里 <code>modeltypes[]</code> 改成 <code>yolo11n_*</code>/<code>yolo26n_*</code>、包名/applicationId/版本号不同。所有模型均为 COCO 80 类。</p>
+
+<h2>三、怎么选</h2>
+<div class="note">
+• 求稳、求生态、接老系统 → <b>v8</b>（或 v5）。<br>
+• 要更好精度/小目标、还想控算力 → <b>v11</b>。<br>
+• 最新、边缘 CPU 极致速度、小目标密集、部署越简单越好 → <b>v26</b>。<br>
+• 现实建议：四个 APK 都齐了，<b>不要二选一，按场景换模型</b>——同一套安卓壳，v8/v11/v26 直接换 ncnn 模型即可（v5 因解码不同需走单独分支）。高算力手机跑 640 档，老机/实时跑 320 档。
+</div>
+
+<h2>四、能否结合大模型改进</h2>
+<p>能，而且很值得。当前是「YOLO 出框 + ncnn 端侧实时」，大模型（VLM/LLM）属「语义理解+决策」层，两者互补不替代：开放词汇检测、自动标注、自然语言查询、提示式智能体、缺陷可解释、小样本适配。详见 <b>「结合大模型改进」</b> 子菜单，以及 app 内已内置的「VLM 分析」功能。</p>
+</body>
+</html>
