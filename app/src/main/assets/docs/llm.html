@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>结合大模型改进 · YOLO-Lite</title>
+<style>
+  body{background:#0e0e12;color:#e6e6ea;font-family:-apple-system,"Noto Sans CJK SC",sans-serif;line-height:1.7;padding:16px;margin:0}
+  h1{font-size:21px;color:#7fd1ff;margin:0 0 4px}
+  h2{font-size:16px;color:#ffd166;margin:20px 0 6px;border-left:4px solid #ffd166;padding-left:8px}
+  .sub{color:#9aa;font-size:12px;margin-bottom:12px}
+  ol{margin:6px 0;padding-left:20px}
+  li{margin:7px 0;font-size:13.5px}
+  .note{background:#16161c;border:1px solid #2a2a33;border-radius:8px;padding:10px 12px;font-size:12.5px;color:#bcd;margin:10px 0}
+  code{background:#222;padding:1px 5px;border-radius:4px;color:#9fe}
+  b{color:#fff}
+</style>
+</head>
+<body>
+<h1>结合大模型改进</h1>
+<div class="sub">YOLO 出框（端侧实时）+ 大模型 VLM/LLM（语义理解/决策）= 互补不替代</div>
+
+<ol>
+<li><b>开放词汇 / 零样本检测</b>：YOLO 框定位置，配 CLIP / Grounding DINO / OWL-ViT，实现「用文字描述就能检测新类别」，无需重新训练。适合 80 类覆盖不到的长尾场景。</li>
+<li><b>自动标注 + 主动学习</b>：YOLO 预标，VLM（GPT-4V / Qwen-VL 等）校验纠错，回流再训练——大幅降低扩类别/扩数据的成本。</li>
+<li><b>自然语言查询与场景理解</b>：端侧 YOLO 实时出框，把框+裁剪图送云端 VLM 做关系推理、计数、异常解释（如「这张图里有没有未戴安全帽的人、在哪」）。</li>
+<li><b>提示式 / 智能体闭环</b>：文本指令 → 检测 → LLM 决策 → 执行（机器人抓取、产线剔除），YOLO 当感知前端。</li>
+<li><b>缺陷 / 异常可解释</b>：工业检测里 YOLO 找缺陷，LLM 给成因和建议，产出人能读的质检报告。</li>
+<li><b>小样本适配</b>：用 VLM 做少样本提示，缓解 YOLO 对新类样本少的问题。</li>
+</ol>
+
+<h2>落地形态（推荐）</h2>
+<div class="note">
+<b>YOLO 端侧 + 大模型云端</b> 是当前性价比最高的组合：重 VLM 放云端/服务端，YOLO 端侧保实时出框，两者用一条 pipeline 串起来（app 本地检测 → 抽帧/抽框上传 → 大模型理解 → 回传结论）。<br><br>
+纯端侧想上轻量大模型，可蒸馏小 VLM 或走端侧 LLM（如 Qwen 小尺寸），但当前阶段「YOLO 端 + 大模型云」最稳。
+</div>
+
+<h2>本 app 已内置</h2>
+<p>v26 工程内已集成「<b>VLM 分析</b>」按钮：检测 → 抽框裁剪 → 调 VLM 端点 → 自然语言结论回显。端点可在设置里配置（URL + 可选密钥），并附带本地代理脚本 <code>vlm_proxy.py</code>（默认 mock，可按文档接入 OpenAI/Claude/Qwen 等真实 VLM）。详见工程 README 与「软件升级」页。</p>
+</body>
+</html>
