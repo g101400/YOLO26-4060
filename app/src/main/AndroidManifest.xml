@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="ncnn.v5lite.demo"
+      android:versionCode="1"
+      android:versionName="6.0.0">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 知识文档「同步最新」从 GitHub 拉取、以及「VLM 分析」调用大模型端点需要联网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Android 9 及以下写公共「下载」目录需要；Android 10+ 走 MediaStore，无需权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="28" />
+    <uses-feature android:name="android.hardware.camera2.full" />
+
+    <application android:label="@string/app_name"
+                 android:theme="@style/AppTheme"
+                 android:icon="@mipmap/ic_launcher"
+                 android:requestLegacyExternalStorage="true">
+        <activity android:name="MainActivity"
+                  android:label="@string/app_name"
+                  android:icon="@mipmap/ic_launcher"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 知识文档阅读器（四系列对比 / 工业场景 / 大模型 / 软件升级 / 扩展研究） -->
+        <activity android:name="DocActivity"
+                  android:label="知识文档"
+                  android:screenOrientation="portrait" />
+    </application>
+</manifest> 
