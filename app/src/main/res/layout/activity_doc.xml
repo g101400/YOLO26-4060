@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#0e0e12">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="center_vertical">
+
+        <Button
+                android:id="@+id/btnDocBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+                android:background="@drawable/bg_button_gray" />
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="YOLO-Lite 知识文档"
+                android:textColor="#7fd1ff"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:paddingStart="8dp" />
+
+        <Button
+                android:id="@+id/btnSync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="同步最新"
+                android:textColor="#99FE9FE0"
+                android:textSize="13sp"
+                android:background="@drawable/bg_button_gray" />
+    </LinearLayout>
+
+    <WebView
+            android:id="@+id/docWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+</LinearLayout>
