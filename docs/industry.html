@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>工业场景应用 · YOLO-Lite</title>
+<style>
+  body{background:#0e0e12;color:#e6e6ea;font-family:-apple-system,"Noto Sans CJK SC",sans-serif;line-height:1.7;padding:16px;margin:0}
+  h1{font-size:21px;color:#7fd1ff;margin:0 0 4px}
+  h2{font-size:16px;color:#ffd166;margin:20px 0 6px;border-left:4px solid #ffd166;padding-left:8px}
+  .sub{color:#9aa;font-size:12px;margin-bottom:12px}
+  .card{background:#16161c;border:1px solid #2a2a33;border-radius:10px;padding:12px 14px;margin:10px 0}
+  .card h3{margin:0 0 6px;color:#9fe;font-size:15px}
+  .kv{font-size:12.5px;color:#cdd}
+  .tag{display:inline-block;background:#1d2330;color:#9fe;font-size:11px;padding:1px 7px;border-radius:6px;margin:2px 3px 0 0}
+  b{color:#fff}
+</style>
+</head>
+<body>
+<h1>工业场景应用</h1>
+<div class="sub">基于 YOLO-Lite 四系列（v5/v8/v11/v26）的端侧检测能力，以下场景已在工程上可落地</div>
+
+<div class="card">
+<h3>① 工业质检（表面缺陷 / 零件缺漏）</h3>
+<div class="kv">PCB 焊点缺失、金属划痕、药板缺粒、食品包装完整性。用 <b>v11/v26</b> 抓小目标与遮挡件，端侧实时剔废。<br>
+<span class="tag">小目标</span><span class="tag">低延迟</span><span class="tag">可解释</span> 配合「VLM 分析」输出缺陷成因与建议，生成人能读的质检报告。</div>
+</div>
+
+<div class="card">
+<h3>② 安全生产 / 安防（人-物行为）</h3>
+<div class="kv">未戴安全帽/工服、人员闯入危险区、烟火、车辆违停。手机或固定摄像头即可部署，<b>v8</b> 生态成熟、模型现成。<br>
+<span class="tag">实时</span><span class="tag">边缘</span> 报警可本地触发，无需上云。</div>
+</div>
+
+<div class="card">
+<h3>③ 农业（病虫害 / 长势 / 畜禽）</h3>
+<div class="kv">航拍或田间摄像头识别病斑、害虫、果蔬成熟度。<b>v11/v26</b> 对小目标（虫卵、早期病斑）更稳。<br>
+<span class="tag">小目标</span><span class="tag">复杂背景</span> 无人机 NVR 可直接跑 ncnn。</div>
+</div>
+
+<div class="card">
+<h3>④ 交通 / 物流（车流 / 包裹 / 车牌）</h3>
+<div class="kv">路口车流统计、包裹分拣、车位占用、车牌/箱体识别。<b>v26</b> 低功耗适合长期值守摄像头。<br>
+<span class="tag">低功耗</span><span class="tag">易部署</span> 无 NMS 让导出到 INT8/TFLite 更干净。</div>
+</div>
+
+<div class="card">
+<h3>⑤ 零售 / 仓储（货架 / 盘点）</h3>
+<div class="kv">货架陈列核对、商品识别、库存盘点。端侧出框 + VLM 做「货架空缺/价签错放」自然语言告警。<br>
+<span class="tag">VLM 闭环</span> 见「结合大模型改进」。</div>
+</div>
+
+<div class="card">
+<h3>⑥ 机器人 / 无人机（感知前端）</h3>
+<div class="kv">抓取前定位、避障、巡检测框。YOLO 当感知前端，文本指令 → 检测 → 决策 → 执行的智能体闭环。<br>
+<span class="tag">智能体</span><span class="tag">端侧实时</span></div>
+</div>
+
+<h2>选型速记</h2>
+<div class="kv">• 要现成多任务、团队快上手 → <b>v8</b>。<br>
+• 小目标/遮挡/复杂背景且要省算力 → <b>v11</b>。<br>
+• 纯边缘、低功耗、小目标密集、易部署 → <b>v26</b>。<br>
+• 接手存量或不追新 → <b>v5</b>。</div>
+</body>
+</html>
